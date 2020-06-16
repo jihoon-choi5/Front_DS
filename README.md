@@ -31,3 +31,36 @@
             + 사용자 선택 DB 업데이트
             + 비식별화 서비스와 연동K
     
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: login-app
+  template:
+    metadata:
+      labels:
+        app: login-app
+    spec:
+      containers:
+      - name: login-app
+        image: wlgns0719/login-app-service:latest
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+------
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-app-service
+spec:
+  ports:
+    - name: "8080"
+      port: 8082
+      targetPort: 8087
+  selector:
+    app: login-app
+  type: NodePort
